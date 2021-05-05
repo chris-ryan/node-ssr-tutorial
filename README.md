@@ -1,12 +1,12 @@
-* Building a node app with a basic web gui using pug *
+**Building a node app with a basic web gui using pug**
 
 In this tutorial we're going to make a very lean and basic server-side web application that uses a template engine (pug) to dynamically display information pulled from an API.
 
-** Prerequisites **
+**Prerequisites**
 
 - Nodejs on your machine
 
-** Setup **
+**Setup**
 
 Start by creating a folder in a directory of your choice using the terminal.
 ``` mkdir pugapp ```
@@ -15,10 +15,10 @@ Start by creating a folder in a directory of your choice using the terminal.
 
 ... answer the usual questions (the defaults are fine)
 
-*** install dependencies ***
+***install dependencies***
 ``` npm install -s axios dotenv pug ```
 
-*** create the initial application files ***
+***create the initial application files***
 Open up the application folder in your code editor.
 
 Create a .env file to store your environment variables. (We'll start with the port we'll run the web server on)
@@ -55,11 +55,11 @@ Well done! You just made a Node web server using the inbuilt http module (ie. wi
 
 In your terminal press ctrl + c to stop the node app from running.
 
-** Templating **
+**Templating**
 
 As you can see in the index.js file, the node server is returning raw html in the response. We could use insert variables into boilerplate html strings and join them all together but as the page gets larger, things would get quite messy if we were to continue down this path. Furthermore, dealing with dynamic content (like lists of an unknown length) can be tricky.
 
-*** Why use templates ***
+***Why use templates***
 Using templating gives us a cleaner way to write our 'presentation' code and helps separate out the 'view' of our application. Templating lets us define html 'views' using a simple syntax and insert variables on-demand to generate html output. In React you use JSX as the templating engine. For our server-side node application, we're going to use a much simpler one: pug.
 
 For example a pug render file that looks like this:
@@ -103,8 +103,8 @@ compiles into...
 </html>
 ```
 
-** Making our basic web application **
-*** Creating html from a template file ***
+**Making our basic web application**
+***Creating html from a template file***
 
 We're going to make a web application that displays job vacancies from the API of a careers site. The structure will be straightforward and consist of 2 pages:
 1 - An index page that shows a list of available jobs
@@ -154,7 +154,7 @@ Start the node app ```node index.js ``` and browse to http://localhost:3000 to v
 
 If there are any problems, check your terminal for debugging details.
 
-*** Injecting variables into our template ***
+***Injecting variables into our template***
 
 We manually defined a list of jobs in our pug template file but like most templating engines, pug gives us an easy way to render variables in our html. The renderFile command take a key-value list (object) of variable names and values as its second argument.
 eg: ``` pug.renderFile('views/index.pug', {name: 'Chris', priority: 1}))```
@@ -197,7 +197,7 @@ html
 
 Restart the node app, refresh your browser and you should see the list of jobs from index.js now displayed in your html list!
 
-*** Getting data from an external API ***
+***Getting data from an external API***
 Let's make this app a bit more useful with some real jobs from an external API.
 
 In index.js, require axios and replace our data variable definition with an axios request to the dataatwork jobs board.
