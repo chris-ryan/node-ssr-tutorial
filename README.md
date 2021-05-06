@@ -124,8 +124,8 @@ html
   body
     h1 Latest vacancies
     ul
-      each job in \['job1', 'job2', 'job3'\]
-        li\= job
+      each job in ['job1', 'job2', 'job3']
+        li= job
 ```
 
 > note: pug is very fussy when it comes to indentation so make sure that you are consistent with your use of spaces or tabs (not both)
@@ -140,12 +140,12 @@ const pug = require('pug');
 
 const PORT = process.env.PORT || 1234
 
-const server = createServer((request,response) \=> {
+const server = createServer((request,response) => {
   return response.end(pug.renderFile('views/index.pug'))
 })
 
-server.listen(PORT, () \=> {
-  console.log(\`The web server is running on port ${PORT}\`)
+server.listen(PORT, () => {
+  console.log(`The web server is running on port ${PORT}`)
 })
 
 ```
@@ -171,14 +171,14 @@ const pug = require('pug');
 
 const PORT = process.env.PORT || 1234
 
-const data = { jobs: \['accountant', 'electrician', 'mechanic', 'teacher'\] }
+const data = { jobs: ['accountant', 'electrician', 'mechanic', 'teacher'] }
 
-const server = createServer((request,response) \=> {
+const server = createServer((request,response) => {
   return response.end(pug.renderFile('views/index.pug', data))
 })
 
-server.listen(PORT, () \=> {
-  console.log(\`The web server is running on port ${PORT}\`)
+server.listen(PORT, () => {
+  console.log(`The web server is running on port ${PORT}`)
 })
 
 ```
@@ -212,16 +212,16 @@ const PORT = process.env.PORT || 1234
 
 const data = {}
 
-axios.get('http://api.dataatwork.org/v1/jobs').then(res \=> {
+axios.get('http://api.dataatwork.org/v1/jobs').then(res => {
   data.jobs = res.data;
 });
 
-const server = createServer((request,response) \=> {
+const server = createServer((request,response) => {
   return response.end(pug.renderFile('views/index.pug', data))
 })
 
-server.listen(PORT, () \=> {
-  console.log(\`The web server is running on port ${PORT}\`)
+server.listen(PORT, () => {
+  console.log(`The web server is running on port ${PORT}`)
 })
 
 ```
@@ -248,3 +248,7 @@ html
 ```
 
 Retart the server and you should now see a list or real jobs!
+
+Right-click on your browser window to inspect the rendered source code.
+You'll see that there is no Javascript. All the JS is executed by the Node server application to dynamically produce the HTML that gets sent to the client/browser.
+
