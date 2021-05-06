@@ -244,7 +244,7 @@ html
     h1 Latest vacancies
     ul
       each job in jobs
-	    li= job.title
+        li= job.title
 ```
 
 Retart the server and you should now see a list or real jobs!
