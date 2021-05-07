@@ -162,8 +162,10 @@ eg: ``` pug.renderFile('views/index.pug', {name: 'Chris', priority: 1}))```
 Define a data object in our Node index.js containing an array of vacant jobs.
 ```const data = { jobs: ['accountant', 'electrician', 'mechanic', 'teacher'] }```
 
-and pass it as a second argument to the renderFile method...
+and pass it as a second argument to the renderFile method.
+```pug.renderFile('views/index.pug', data)```
 
+index.js
 ```js
 require('dotenv').config()
 const { createServer } = require('http')
