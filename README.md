@@ -387,7 +387,7 @@ html
     title Not Seek
   body
     h1 Latest vacancies
-    h2 Page #{page}
+    h2 Page #{page} of #{pageCount}
     ul
       each job in jobs
         li
