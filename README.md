@@ -262,11 +262,11 @@ There are 3 components to achieving pagination in our application.
 
 ## 1. The restricted list ##
 
-Much like we did for page 2. We're going to use a url query to change what information get stored on our index page. In this instance, we're going to use ?page= to pass in a page number that will tell us which section of the array to display on the index page. (10 jobs per page)
+Much like we did for page 2. We're going to use a url query to change what information gets stored on our index page. In this instance, we're going to use ?page= to pass in a page number that will tell us which section of the array to display on the index page. (10 jobs per page)
 
 eg: ``` http://localhost:3000/?page=2 ``` should display the second page, ie list items 11 - 20.
 
-Currently, when the index page is requested from our server, the logic is handled by the showAll controller function which passes a data object to the pug template containing a list of jobs:
+Currently, when the index page is requested from our server, the logic is handled by the showAll controller function which passes a list of jobs to the pug template:
 
 ```js
 const showAll = (jobs, url) => {
@@ -419,7 +419,7 @@ Restart, refresh and inspect the resultant page.
 There are a few caveats here that we need to address.
 
 First, take a look at the *Next* link. On page 1 its trying to take us to page 11 and on page 2 its linking to page 21.
-That's because we're getting the page number as a url query parameter which by default is treated as a string. When we go to apply "+ 1" to it, the server literally appends the Number one to our string variable.
+That's because we're getting the page number as a url query parameter which by default is treated as a string. When we go to apply "+ 1" to it, the server literally appends the Number "1" to our variable.
 
 Back in our index.js, lets put the function that gets the page number into parseInt() so that we can be certain that it will get stored as a Number type.
 
