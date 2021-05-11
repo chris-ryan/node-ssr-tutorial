@@ -379,6 +379,8 @@ Then we loop through the numbers until we hit our calculated page count
 The index pug template should now look like this...
 
 ```
+- var n = 1;
+
 doctype html
 html
   head
