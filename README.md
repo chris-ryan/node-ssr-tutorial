@@ -315,6 +315,7 @@ const showAll = (jobs, url) => {
 ```
 
 Back in our index.js, use the page number to slice the array into only the bit we want to display.
+
 ``` Array.Slice() ``` takes 2 arguments: The start and the end indexes of the elements we want.
 As each page will contain 10 elements, we can use our page number to calculate the start and end indexes to pass into our slice.
 
@@ -329,13 +330,13 @@ const showAll = (jobs, url) => {
   return { jobs: pagedJobs, page: page }
 }
 ```
-Note that we changed the value of the jobs property that we're returning so that its the newly sliced array *pagedJobs*
+**Note** that we changed the value of the jobs property that we're returning so that its the newly sliced array *pagedJobs*
 
 Restart the server and try browsing to http://localhost:3000 and http://localhost:3000/?page=2
 You should see both the page number heading and the list of jobs change.
 
 ## 2. The pagination navigation list ##
-To create our list of links with page numbers we can use a simple pug iterator (while loop) but first lets calclulate how many page we're going to need to we can tell pug when to stop iterating.
+To create our list of links with page numbers we can use a simple pug iterator (while loop) but first lets calclulate how many pages we're going to need so that we can tell pug when to stop iterating.
 
 To calculate the number of required pages, we divide our array length by the number of elements per page and round up to the nearest whole number.
 (The rounding up is taken care of by Javascript's Math.ceil() function
