@@ -268,7 +268,7 @@ eg: ``` http://localhost:3000/?page=2 ``` should display the second page, ie lis
 
 Currently, when the index page is requested from our server, the logic is handled by the showAll controller function which passes a data object to the pug template containing a list of jobs:
 
-```
+```js
 const showAll = (jobs, url) => {
   return { jobs: jobs }
 }
@@ -276,7 +276,7 @@ const showAll = (jobs, url) => {
 
 Let's start by getting the page number from the url query, add adding it as another property that we pass along to the pug template.
 
-```
+```js
 const showAll = (jobs, url) => {
   let page = url.searchParams.get('page')
   return { jobs: jobs, page: page }
@@ -305,7 +305,7 @@ But what happens if we leave out the page argument? Eg: http://localhost:3000
 
 You'll see that the Page subheading number is blank. Let's fix that with an if statement to handle this scenario.
 
-```
+```js
 const showAll = (jobs, url) => {
   let page = url.searchParams.get('page')
   if (!page) page = 1
@@ -319,7 +319,7 @@ Back in our index.js, use the page number to slice the array into only the bit w
 ``` Array.Slice() ``` takes 2 arguments: The start and the end indexes of the elements we want.
 As each page will contain 10 elements, we can use our page number to calculate the start and end indexes to pass into our slice.
 
-```
+```js
 const showAll = (jobs, url) => {
   let page = url.searchParams.get('page')
   if (!page) page = 1
@@ -345,7 +345,7 @@ To calculate the number of required pages, we divide our array length by the num
 
 Add this into the showAll function and pass it to pug as another variable.
 
-```
+```js
 const showAll = (jobs, url) => {
   let page = url.searchParams.get('page')
   if (!page) page = 1
