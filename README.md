@@ -254,3 +254,152 @@ Retart the server and you should now see a list or real jobs!
 Right-click on your browser window to inspect the rendered source code.
 You'll see that there is no Javascript. All the JS is executed by the Node server application to dynamically produce the HTML that gets sent to the client/browser.
 
+...
+
+# Pagination
+There are 3 components to achieving pagination in our application.
+![alt text](https://github.com/chris-ryan/node-ssr-tutorial/blob/main/pagination.png?raw=true)
+
+## 1. The restricted list ##
+
+Much like we did for page 2. We're going to use a url query to change what information get stored on our index page. In this instance, we're going to use ?page= to pass in a page number that will tell us which section of the array to display on the index page. (10 jobs per page)
+
+eg: ``` http://localhost:3000/?page=2 ``` should display the second page, ie list items 11 - 20.
+
+Currently, when the index page is requested from our server, the logic is handled by the showAll controller function which passes a data object to the pug template containing a list of jobs:
+
+```
+const showAll = (jobs, url) => {
+  return { jobs: jobs }
+}
+```
+
+Let's start by getting the page number from the url query, add adding it as another property that we pass along to the pug template.
+
+```
+const showAll = (jobs, url) => {
+  let page = url.searchParams.get('page')
+  return { jobs: jobs, page: page }
+}
+```
+
+So that we can confirm what page we're on, let's add it in to our pug template.
+
+```
+doctype html
+html
+  head
+    title Not Seek
+  body
+    h1 Latest vacancies
+    h2 Page #{page}
+    ul
+      each job in jobs
+        li
+          a(href=`/page2.html?id=${job.uuid}`) #{job.title}
+```
+Restart the server and browse to http://localhost:3000/?page=2
+You should now see "Page 2" as a subheading.
+
+But what happens if we leave out the page argument? Eg: http://localhost:3000 
+
+You'll see that the Page subheading number is blank. Let's fix that with an if statement to handle this scenario.
+
+```
+const showAll = (jobs, url) => {
+  let page = url.searchParams.get('page')
+  if (!page) page = 1
+  
+  return { jobs: jobs, page: page }
+}
+```
+
+Back in our index.js, use the page number to slice the array into only the bit we want to display.
+``` Array.Slice() ``` takes 2 arguments: The start and the end indexes of the elements we want.
+As each page will contain 10 elements, we can use our page number to calculate the start and end indexes to pass into our slice.
+
+```
+const showAll = (jobs, url) => {
+  let page = url.searchParams.get('page')
+  if (!page) page = 1
+
+  const endIndex = page * 10
+  const startIndex = endIndex - 10
+  const pagedJobs = jobs.slice(startIndex, endIndex)
+  return { jobs: pagedJobs, page: page }
+}
+```
+Note that we changed the value of the jobs property that we're returning so that its the newly sliced array *pagedJobs*
+
+Restart the server and try browsing to http://localhost:3000 and http://localhost:3000/?page=2
+You should see both the page number heading and the list of jobs change.
+
+## 2. The pagination navigation list ##
+To create our list of links with page numbers we can use a simple pug iterator (while loop) but first lets calclulate how many page we're going to need to we can tell pug when to stop iterating.
+
+To calculate the number of required pages, we divide our array length by the number of elements per page and round up to the nearest whole number.
+(The rounding up is taken care of by Javascript's Math.ceil() function
+
+``` let pageCount = Math.ceil(jobs.length / 10) ```
+
+Add this into the showAll function and pass it to pug as another variable.
+
+```
+const showAll = (jobs, url) => {
+  let page = url.searchParams.get('page')
+  if (!page) page = 1
+
+  let pageCount = Math.ceil(jobs.length / 10)
+
+  const endIndex = page * 10
+  const startIndex = endIndex - 10
+  const pagedJobs = jobs.slice(startIndex, endIndex)
+  return { jobs: pagedJobs, page: page, pageCount: pageCount }
+}
+```
+
+Now in our index.pug, we can add it in next to our page number to test that its working.
+``` h2 Page #{page} of #{pageCount} ```
+
+Restart and refresh and you should now see Page X of Y on your jobs list page.
+
+Back in index.pug, to create the list of links we create a loop using pug's while syntax.
+Start by initialising a local variable at the top of the pug template file:
+``` - var n = 1; ```
+
+Then we loop through the numbers until we hit our calculated page count
+```
+    ul
+      while n < pageCount
+        li
+          a(href=`/?page=${n}`) #{n++}
+```
+
+The index pug template should now look like this...
+
+```
+doctype html
+html
+  head
+    title Not Seek
+  body
+    h1 Latest vacancies
+    h2 Page #{page}
+    ul
+      each job in jobs
+        li
+          a(href=`/page2.html?id=${job.uuid}`) #{job.title}
+    ul
+      while n < pageCount
+        li
+          a(href=`/?page=${n}`) #{n++}
+```
+
+> Note: Just like in plain Javascript, while loops require manual progress which is what the n++ does.
+
+Restart and refresh. You should now have a list of links that you can use to cycle between pages!
+(There may be a blank final page as the array we're pulling down has an empty element at the end)
+
+Use CSS to make the list horizontal. ``` display: inline-block; ``` should do the trick
+
+## 3. Relative pagination navigation links ##
