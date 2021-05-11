@@ -406,3 +406,50 @@ Restart and refresh. You should now have a list of links that you can use to cyc
 Use CSS to make the list horizontal. ``` display: inline-block; ``` should do the trick
 
 ## 3. Relative pagination navigation links ##
+
+As we're already passing our current page number into our pug template, creating previous and next links should be fairly straightforward.
+Add the following two lines to our index.pug file on either side of our navigation list:
+```
+a(href=`/?page=${page - 1}`) < Previous
+a(href=`/?page=${page + 1}`) Next >
+```
+
+Restart, refresh and inspect the resultant page.
+
+There are a few caveats here that we need to address.
+
+First, take a look at the *Next* link. On page 1 its trying to take us to page 11 and on page 2 its linking to page 21.
+That's because we're getting the page number as a url query parameter which by default is treated as a string. When we go to apply "+ 1" to it, the server literally appends the Number one to our string variable.
+
+Back in our index.js, lets put the function that gets the page number into parseInt() so that we can be certain that it will get stored as a Number type.
+
+```js
+const showAll = (jobs, url) => {
+  let page = parseInt(url.searchParams.get('page'))
+```
+
+Another caveat is that our *Previous* and *Next* links can go beyond the scope of the number of pages (eg: page=0 and page=7).
+
+Fortunately pug has a simple conditional syntax (if and else statements) that we can use to only show the links if they are valid options.
+
+In index.pug: Prefix the *Previous* and *Next* links with the required if statements:
+
+```
+if page > 1
+  a(href=`/?page=${page - 1}`) < Previous
+```
+
+```
+if page < pageCount
+  a(href=`/?page=${page + 1}`) Next >
+```
+
+> Note: This will make the links disappear completely. If you want to leave them visible but disabled and possibly greyed with a bit of CSS, you can add in an else statement to replace each link with just the text.
+
+eg:
+```
+if page > 1
+  a(href=`/?page=${page - 1}`) < Previous
+else
+  span < Previous
+```
