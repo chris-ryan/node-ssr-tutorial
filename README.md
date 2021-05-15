@@ -498,3 +498,35 @@ Here's some sample code for a typical test block:
 
 There are a number of different syntaxes and libraries for constructing assertions. A very popular one that is often used with Mocha is Chai.js
 Chai's syntax gives us a very natural logical and gramatical to write and read test logic.
+
+## Writing a test helper
+As you can see there's a consistent bit of overhead that we're requiring in our test files.
+```
+const expect = require("chai").expect
+const nock = require('nock')
+const request = require('superagent')
+const apiCall = require("../index")
+
+```
+
+Rather than add it to every file, we can pop it into a single file and tell Mocha to automatically require it for every test file that is run.
+
+1. Make a new file in the test folder called testhelper.js
+test/testhelper.js
+
+```
+const expect = require("chai").expect
+const nock = require('nock')
+const request = require('superagent')
+const apiCall = require("../index")
+
+```
+
+2. Add the file as an argument to our test run command in pakage.json
+
+package.json
+```
+"scripts": {
+    "test": "mocha --reporter spec --require test/testhelper.js"
+  },
+```
