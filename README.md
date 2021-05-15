@@ -453,3 +453,48 @@ if page > 1
 else
   span < Previous
 ```
+
+# Writing tests
+
+Though writing tests are useful when building functionality in our code in terms of making us think about all the required inputs and behaviours of individual modules, their real power is in picking up new unexpected bugs from changes you made to some unsuspecting code in a related module or dependency update.
+
+When writing tests for an application, you typically write them in batches that are module specific. These batches are referred to as suites or specs. Each suite typically contains a batch of tests organized in a way that almost mirrors the application itself. This works well with Node, where you can import/require the module you want to test against and write a collection of tests for each part of the module's functionality.
+
+Since you'll end up with multiple test files, we employ a test runner: a command-line application that will run all our test files and give us the test results. We'll use Mocha as its by far the most popular Node test runner at the time of writing.
+
+By default Mocha looks for a folder called 'test' then scans all the .js files within looking for specificly named function blocks:
+- describe(): The parent function that contains a group of tests using Mocha functions.
+- beforeEach(): Gets executed before the test to set up any required pre-test work.
+- afterEach(): Gets executed after a test to perform any required cleanup before other tests in the group are run.
+- it(): These blocks contain the "individual tests". Within each *it()* statement it's generally considered good practice to include a single assertion. (An assertion is a type of boolean expression that throws an error if the expression returns as false). ie. You want to *assert* that something is true and if not, return an error, which in this cae is picked up by Mocha as a failed test.
+
+Here's some sample code for a typical test block:
+
+```js
+“describe('The code', function() {
+    beforeEach(function(){
+        // optional preparation for each test (such as connecting to a database)
+    });
+    afterEach(function(){
+        // optional cleanup after each test (such as disconnecting from a database)
+    });
+
+    it('should test something', function(){
+        var something = 1;
+        // here we "expect" some condition to declare our test
+        // in this case, we expect the variable to exist
+        expect(something).to.exist;
+    });
+    it('should test something_else', function(){
+        var something_else = false;
+        // now we test a different variable against its value
+        // and expect that value to equal false
+        expect(something_else).to.equal(false);
+    });
+});”
+```
+
+## Defining assertions
+
+There are a number of different syntaxes and libraries for constructing assertions. A very popular one that is often used with Mocha is Chai.js
+Chai's syntax gives us a very natural logical and gramatical to write and read test logic.
